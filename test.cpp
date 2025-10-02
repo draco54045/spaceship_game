@@ -2,8 +2,8 @@
 // Extendable 2D top-down game skeleton using SDL2 + SDL2_image
 // Fixes incomplete type issues by moving Game class definition above Entity classes
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -13,7 +13,7 @@
 #include <algorithm>
 
 // ---------------------- Config ----------------------
-static const int WINDOW_W = 800;
+static const int WINDOW_W = 900;
 static const int WINDOW_H = 600;
 static const int VIRTUAL_WORLD_W = 2000; // world size (for demo)
 static const int VIRTUAL_WORLD_H = 2000;

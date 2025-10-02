@@ -8,8 +8,8 @@ SDL_FLAGS = $(shell pkg-config --cflags --libs sdl2) -lSDL2_image
 
 # Targets
 SRC = test.cpp
-OUT_LINUX = game
-OUT_WIN = game.exe
+OUT_LINUX = ./build/game
+OUT_WIN = ./build/game.exe
 
 all: linux windows
 

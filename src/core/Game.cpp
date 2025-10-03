@@ -47,7 +47,7 @@ void Game::run() {
         entities->updateAll(*this, dt);
         camera.follow(Vec2(player->pos.x + player->w/2.0f, player->pos.y + player->h/2.0f), dt);
 
-        SDL_SetRenderDrawColor(renderer, 20, 20, 30, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
         renderGrid();
@@ -62,17 +62,25 @@ void Game::run() {
 }
 
 void Game::renderGrid() {
-    const int cell = 64;
-    SDL_SetRenderDrawColor(renderer, 40, 40, 50, 255);
+    const int cell = 128;
+    
     int left = int(camera.pos.x);
     int top = int(camera.pos.y);
     int right = left + WINDOW_W;
     int bottom = top + WINDOW_H;
+    int i;
     for(int gx = (left / cell) * cell; gx <= right; gx += cell) {
+        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
         SDL_Rect line = {gx, top, 1, WINDOW_H};
         auto s = camera.worldToScreen(line);
         SDL_RenderFillRect(renderer, &s);
+
+        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        //SDL_Rect line2 = {gx-10, top, 1, WINDOW_H};
+        //auto ss = camera.worldToScreen(line2);
+        //SDL_RenderFillRect(renderer, &ss);
     }
+    SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     for(int gy = (top / cell) * cell; gy <= bottom; gy += cell) {
         SDL_Rect line = {left, gy, WINDOW_W, 1};
         auto s = camera.worldToScreen(line);

@@ -1,0 +1,7 @@
+# Object files
+obj
+*.o
+
+#Personal build/save files for testing
+build/
+saves/

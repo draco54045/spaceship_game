@@ -4,4 +4,8 @@ obj
 
 #Personal build/save files for testing
 build/
+build/*.dll
 saves/
+
+#Personal IDE settings
+.vscode/

@@ -1,7 +1,3 @@
-// sdl2_topdown_game.cpp
-// Extendable 2D top-down game skeleton using SDL2 + SDL2_image
-// Fixes incomplete type issues by moving Game class definition above Entity classes
-
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>

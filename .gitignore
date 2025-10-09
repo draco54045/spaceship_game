@@ -9,3 +9,6 @@ saves/
 
 #Personal IDE settings
 .vscode/
+
+#Shell scripts
+*.sh

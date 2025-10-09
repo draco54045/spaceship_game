@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(): window(nullptr), renderer(nullptr), texman(nullptr), entities(nullptr), player(nullptr), camera(WINDOW_W, WINDOW_H) {}
+Game::Game(): window(nullptr), renderer(nullptr), texman(nullptr), entities(nullptr), player(nullptr), fonts(nullptr), camera(WINDOW_W, WINDOW_H), board() {}
 Game::~Game() { cleanup(); }
 
 bool Game::init() {
@@ -11,6 +11,10 @@ bool Game::init() {
     if(!(IMG_Init(imgFlags) & imgFlags)) {
         std::cerr << "IMG_Init failed: " << IMG_GetError() << "\n";
     }
+    if (TTF_Init() == -1) {
+        std::cout << "Error initializing SDL_ttf: "<< SDL_GetError();
+        return false;
+    }
     window = SDL_CreateWindow("TopDown - SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
     if(!window) { std::cerr << "Window creation failed: "<<SDL_GetError()<<"\n"; return false; }
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -18,11 +22,18 @@ bool Game::init() {
     texman = std::make_unique<TextureManager>(renderer);
     entities = std::make_unique<EntityManager>();
     player = entities->create<Player>(VIRTUAL_WORLD_W/2.0f - 24.0f, VIRTUAL_WORLD_H/2.0f - 24.0f);
+    fonts = std::make_unique<FontManager>();
+    fonts->openFonts();
+    board.Set(renderer, &camera, fonts.get());  
     lastTicks = SDL_GetPerformanceCounter();
     return true;
 }
 
 void Game::run() {
+    int texW = 0; //0
+    int texH = 0; //0
+    SDL_Color color = { 255, 0, 0, 255 };
+    TTF_Font * font = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 55);
     bool quit = false;
     while(!quit) {
         Uint64 now = SDL_GetPerformanceCounter();
@@ -43,14 +54,21 @@ void Game::run() {
         }
         const Uint8* keystate = SDL_GetKeyboardState(NULL);
         player->handleInput(keystate, dt);
-
         entities->updateAll(*this, dt);
         camera.follow(Vec2(player->pos.x + player->w/2.0f, player->pos.y + player->h/2.0f), dt);
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+        board.renderBoard();
 
-        renderGrid();
+        std::string str = "speed : " + std::to_string(player->currentSpeed);
+        SDL_Surface * surface = TTF_RenderText_Solid(font, str.c_str(), color);
+        SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+        SDL_Rect dstrect = { 20, 20, texW, texH };
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
+        //auto s = camera.worldToScreen(dstrect);
+        //SDL_RenderFillRect(renderer, &s);
+        SDL_RenderCopy(renderer, texture, NULL, &dstrect);
         entities->renderAll(*this, renderer);
         player->render(*this, renderer);
 
@@ -58,34 +76,11 @@ void Game::run() {
         renderCrosshair(mx, my);
 
         SDL_RenderPresent(renderer);
+        SDL_DestroyTexture(texture);
+        SDL_FreeSurface(surface);
     }
-}
-
-void Game::renderGrid() {
-    const int cell = 128;
+    TTF_CloseFont(font);
     
-    int left = int(camera.pos.x);
-    int top = int(camera.pos.y);
-    int right = left + WINDOW_W;
-    int bottom = top + WINDOW_H;
-    int i;
-    for(int gx = (left / cell) * cell; gx <= right; gx += cell) {
-        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
-        SDL_Rect line = {gx, top, 1, WINDOW_H};
-        auto s = camera.worldToScreen(line);
-        SDL_RenderFillRect(renderer, &s);
-
-        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        //SDL_Rect line2 = {gx-10, top, 1, WINDOW_H};
-        //auto ss = camera.worldToScreen(line2);
-        //SDL_RenderFillRect(renderer, &ss);
-    }
-    SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
-    for(int gy = (top / cell) * cell; gy <= bottom; gy += cell) {
-        SDL_Rect line = {left, gy, WINDOW_W, 1};
-        auto s = camera.worldToScreen(line);
-        SDL_RenderFillRect(renderer, &s);
-    }
 }
 
 void Game::renderCrosshair(int sx, int sy) {
@@ -101,6 +96,8 @@ void Game::cleanup() {
     entities.reset();
     if(renderer) SDL_DestroyRenderer(renderer);
     if(window) SDL_DestroyWindow(window);
+    fonts.reset();
     IMG_Quit();
     SDL_Quit();
+    TTF_Quit();
 }

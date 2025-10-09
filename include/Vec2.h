@@ -13,3 +13,4 @@ struct Vec2 {
 
 inline float length(const Vec2 &v) { return std::sqrt(v.x*v.x + v.y*v.y); }
 inline Vec2 normalize(const Vec2 &v) { float l = length(v); return l==0?Vec2(0,0):Vec2(v.x/l, v.y/l); }
+inline float dot(const Vec2& a, const Vec2& b) { return a.x * b.x + a.y * b.y; }

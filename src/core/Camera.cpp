@@ -1,5 +1,6 @@
 #include "Camera.h"
 
+Camera::Camera() {}
 Camera::Camera(int w, int h): screenW(w), screenH(h) {}
 
 void Camera::follow(const Vec2 &target, float /*dt*/) {

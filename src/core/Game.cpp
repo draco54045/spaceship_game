@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(): window(nullptr), renderer(nullptr), texman(nullptr), entities(nullptr), player(nullptr), fonts(nullptr), camera(WINDOW_W, WINDOW_H), board() {}
+Game::Game(): window(nullptr), renderer(nullptr), texman(nullptr), entities(nullptr), player(nullptr), fonts(nullptr), camera(WINDOW_W, WINDOW_H), board(), ui(), uiMGR() {}
 Game::~Game() { cleanup(); }
 
 bool Game::init() {
@@ -24,16 +24,15 @@ bool Game::init() {
     player = entities->create<Player>(VIRTUAL_WORLD_W/2.0f - 24.0f, VIRTUAL_WORLD_H/2.0f - 24.0f);
     fonts = std::make_unique<FontManager>();
     fonts->openFonts();
-    board.Set(renderer, &camera, fonts.get());  
+    board.Set(renderer, &camera, fonts.get());
+    ui.Set(player);
+    uiMGR = std::make_unique<UIManager>();
+    uiMGR->Set(renderer, fonts.get(), &ui);
     lastTicks = SDL_GetPerformanceCounter();
     return true;
 }
 
 void Game::run() {
-    int texW = 0; //0
-    int texH = 0; //0
-    SDL_Color color = { 255, 0, 0, 255 };
-    TTF_Font * font = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 55);
     bool quit = false;
     while(!quit) {
         Uint64 now = SDL_GetPerformanceCounter();
@@ -54,33 +53,16 @@ void Game::run() {
         }
         const Uint8* keystate = SDL_GetKeyboardState(NULL);
         player->handleInput(keystate, dt);
+        int mx,my; SDL_GetMouseState(&mx,&my);
         entities->updateAll(*this, dt);
         camera.follow(Vec2(player->pos.x + player->w/2.0f, player->pos.y + player->h/2.0f), dt);
-
         board.renderBoard();
-
-        std::string str = "speed : " + std::to_string(player->currentSpeed);
-        SDL_Surface * surface = TTF_RenderText_Solid(font, str.c_str(), color);
-        SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-        SDL_Rect dstrect = { 20, 20, texW, texH };
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-        SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
-        //auto s = camera.worldToScreen(dstrect);
-        //SDL_RenderFillRect(renderer, &s);
-        SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+        uiMGR->drawUI();
         entities->renderAll(*this, renderer);
         player->render(*this, renderer);
-
-        int mx,my; SDL_GetMouseState(&mx,&my);
         renderCrosshair(mx, my);
-
         SDL_RenderPresent(renderer);
-        SDL_DestroyTexture(texture);
-        SDL_FreeSurface(surface);
     }
-    TTF_CloseFont(font);
-    
 }
 
 void Game::renderCrosshair(int sx, int sy) {
@@ -97,6 +79,7 @@ void Game::cleanup() {
     if(renderer) SDL_DestroyRenderer(renderer);
     if(window) SDL_DestroyWindow(window);
     fonts.reset();
+    uiMGR.reset();
     IMG_Quit();
     SDL_Quit();
     TTF_Quit();

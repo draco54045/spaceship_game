@@ -11,7 +11,7 @@ public:
     Entity(float x, float y, int w, int h);
     virtual ~Entity() = default;
     virtual void update(Game& g, float dt) {}
-    virtual void render(Game& g, SDL_Renderer* renderer);
+    virtual void render(Game& g, SDL_Renderer* renderer, float dt);
     SDL_Rect aabb() const;
 
     Vec2 pos;

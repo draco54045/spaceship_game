@@ -3,7 +3,7 @@
 
 Entity::Entity(float x, float y, int w, int h): pos{x,y}, w(w), h(h) {}
 
-void Entity::render(Game& g, SDL_Renderer* renderer) {
+void Entity::render(Game& g, SDL_Renderer* renderer, float dt) {
     SDL_Rect r{int(pos.x), int(pos.y), w, h};
     auto screen = g.camera.worldToScreen(r);
     SDL_SetRenderDrawColor(renderer, 200, 50, 50, 255);

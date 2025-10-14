@@ -14,7 +14,7 @@ public:
         return ptr;
     }
     void updateAll(Game& g, float dt);
-    void renderAll(Game& g, SDL_Renderer* renderer);
+    void renderAll(Game& g, SDL_Renderer* renderer, float dt);
 
 private:
     std::vector<std::unique_ptr<Entity>> entities;

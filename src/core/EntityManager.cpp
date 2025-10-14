@@ -8,6 +8,6 @@ void EntityManager::updateAll(Game& g, float dt) {
         entities.end());
 }
 
-void EntityManager::renderAll(Game& g, SDL_Renderer* renderer) {
-    for(auto &e: entities) if(e->alive) e->render(g, renderer);
+void EntityManager::renderAll(Game& g, SDL_Renderer* renderer, float dt) {
+    for(auto &e: entities) if(e->alive) e->render(g, renderer, dt);
 }

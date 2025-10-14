@@ -13,6 +13,7 @@ void UIManager::drawUI(){
     auto data = ui->getData();
     drawElement(16, 16, "speed : " + data.speed, UIColor, fonts->UIFont);
     drawElement(16, 64, "direction : " + data.direction, UIColor, fonts->UIFont);
+    drawElement(16, 112, "mouse : " + data.mouseVector, UIColor, fonts->UIFont);
 }
 
 void UIManager::drawElement(int x, int y, std::string content, SDL_Color color, TTF_Font *font){

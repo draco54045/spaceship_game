@@ -8,6 +8,7 @@ class Player;
 struct UIData {
     std::string speed;
     std::string direction;
+    std::string mouseVector;
 };
 
 class UI {

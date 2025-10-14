@@ -8,8 +8,11 @@ void UI::Set(Player* plr){
 }
 
 UIData UI::getData(){
+    int mx,my;
+    SDL_GetMouseState(&mx,&my);
     return { 
         std::to_string(player->currentSpeed),
-        "[" + std::to_string(player->lastDir.x) + ", " + std::to_string(player->lastDir.y) + "]"
+        "[" + std::to_string(player->dir.x) + ", " + std::to_string(player->dir.y) + "]",
+        "[" + std::to_string(mx) + ", " + std::to_string(my) + "]"
     };
 }

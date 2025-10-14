@@ -22,6 +22,7 @@ bool Game::init() {
     texman = std::make_unique<TextureManager>(renderer);
     entities = std::make_unique<EntityManager>();
     player = entities->create<Player>(VIRTUAL_WORLD_W/2.0f - 24.0f, VIRTUAL_WORLD_H/2.0f - 24.0f);
+    player->texture = texman->load("./assets/graphics/player_test.png");
     fonts = std::make_unique<FontManager>();
     fonts->openFonts();
     board.Set(renderer, &camera, fonts.get());
@@ -52,14 +53,15 @@ void Game::run() {
             }
         }
         const Uint8* keystate = SDL_GetKeyboardState(NULL);
-        player->handleInput(keystate, dt);
+        player->handleInput(keystate, dt, *this);
         int mx,my; SDL_GetMouseState(&mx,&my);
+        player->update(*this, dt);
         entities->updateAll(*this, dt);
         camera.follow(Vec2(player->pos.x + player->w/2.0f, player->pos.y + player->h/2.0f), dt);
         board.renderBoard();
         uiMGR->drawUI();
-        entities->renderAll(*this, renderer);
-        player->render(*this, renderer);
+        entities->renderAll(*this, renderer, dt);
+        player->render(*this, renderer, dt);
         renderCrosshair(mx, my);
         SDL_RenderPresent(renderer);
     }

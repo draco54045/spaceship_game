@@ -10,7 +10,6 @@ public:
     void handleInput(const Uint8* k, float dt, Game& g);
     void update(Game& g, float dt) override;
     void render(Game& g, SDL_Renderer* renderer, float dt) override;
-    float lerpAngle(float a, float b, float t);
 
     float currentSpeed = 0.0f;
     float baseSpeed = 0.0f;

@@ -20,3 +20,4 @@ inline float length(const Vec2 &v) { return std::sqrt(v.x*v.x + v.y*v.y); }
 inline Vec2 normalize(const Vec2 &v) { float l = length(v); return l==0?Vec2(0,0):Vec2(v.x/l, v.y/l); }
 inline float dot(const Vec2& a, const Vec2& b) { return a.x * b.x + a.y * b.y; }
 inline Vec2 lerpVec(const Vec2& a, const Vec2& b, float t) { return a + (b - a) * clamp(t, 0.0f, 1.0f);}
+inline float lerpAngle(float a, float b, float t) { float diff = fmodf(b - a + 540.0f, 360.0f) - 180.0f; return a + diff * clamp(t, 0.0f, 1.0f);}

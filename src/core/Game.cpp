@@ -26,8 +26,8 @@ bool Game::init() {
     fonts = std::make_unique<FontManager>();
     fonts->openFonts();
     board.Set(renderer, &camera, fonts.get());
-    ui.Set(player);
     uiMGR = std::make_unique<UIManager>();
+    ui.Set(player, *this);
     uiMGR->Set(renderer, fonts.get(), &ui);
     lastTicks = SDL_GetPerformanceCounter();
     return true;
@@ -35,11 +35,12 @@ bool Game::init() {
 
 void Game::run() {
     bool quit = false;
+    float fpsTimer = 0.0f;
+    int frameCount = 0;
     while(!quit) {
         Uint64 now = SDL_GetPerformanceCounter();
         float dt = float((now - lastTicks) / double(SDL_GetPerformanceFrequency()));
         lastTicks = now;
-
         SDL_Event e;
         while(SDL_PollEvent(&e)) {
             if(e.type == SDL_QUIT) quit = true;
@@ -51,6 +52,14 @@ void Game::run() {
                 Vec2 spawn = Vec2(player->pos.x + player->w/2.0f - 4, player->pos.y + player->h/2.0f - 4);
                 entities->create<Bullet>(spawn.x, spawn.y, dir);
             }
+        }
+        frameCount++;
+        fpsTimer += dt;
+        if (fpsTimer >= 1.0f) {
+            fps = frameCount / fpsTimer;
+            //std::cout << "FPS: " << fps << std::endl;
+            frameCount = 0;
+            fpsTimer = 0.0f;
         }
         const Uint8* keystate = SDL_GetKeyboardState(NULL);
         player->handleInput(keystate, dt, *this);

@@ -70,8 +70,3 @@ void Player::render(Game& g, SDL_Renderer* renderer, float dt) {
     rotation = lerpAngle(rotation, targetAngle, 10.0f * dt);
     SDL_RenderCopyEx(renderer, texture, NULL, &screen, rotation+90, NULL, SDL_FLIP_NONE);
 }
-
-float Player::lerpAngle(float a, float b, float t) {
-    float diff = fmodf(b - a + 540.0f, 360.0f) - 180.0f;
-    return a + diff * clamp(t, 0.0f, 1.0f);
-}

@@ -10,10 +10,12 @@ void UIManager::Set(SDL_Renderer* rend, FontManager* fo, UI* u){
 }
 
 void UIManager::drawUI(){
-    auto data = ui->getData();
-    drawElement(16, 16, "speed : " + data.speed, UIColor, fonts->UIFont);
-    drawElement(16, 64, "direction : " + data.direction, UIColor, fonts->UIFont);
-    drawElement(16, 112, "mouse : " + data.mouseVector, UIColor, fonts->UIFont);
+    auto playerData = ui->getPlayerData();
+    drawElement(4, 4, "speed : " + playerData.speed, UIColor, fonts->UIFont);
+    drawElement(4, 40, "direction : " + playerData.direction, UIColor, fonts->UIFont);
+    drawElement(4, 80, "mouse : " + playerData.mouseVector, UIColor, fonts->UIFont);
+    auto gameData = ui->getGameData();
+    drawElement(4,116, "FPS : " + gameData.fps, UIColor, fonts->UIFont);
 }
 
 void UIManager::drawElement(int x, int y, std::string content, SDL_Color color, TTF_Font *font){

@@ -34,6 +34,8 @@ public:
     TTF_Font* font = nullptr;
     Board board;
     UI ui;
+
+    float fps;
 private:
     Uint64 lastTicks;
 };

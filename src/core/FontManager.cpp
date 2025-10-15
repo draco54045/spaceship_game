@@ -9,7 +9,7 @@ void FontManager::openFonts(){
         std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
     }
     fonts.push_back(GridFont);
-    UIFont = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 48);
+    UIFont = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 32);
     if (!UIFont) {
         std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
     }

@@ -1,8 +1,8 @@
-#include "Game.h"
+#include "App.h"
 
 int main(int /*argc*/, char** /*argv*/) {
-    Game g;
-    if(!g.init()) return 1;
-    g.run();
+    App app;
+    if(!app.init()) return 1;
+    app.run();
     return 0;
 }

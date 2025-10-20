@@ -4,7 +4,7 @@
 #include "Player.h"
 
 class Player;
-class Game;
+class GameplayScene;
 
 struct UIPlayerData {
     std::string speed;
@@ -22,9 +22,9 @@ public:
     UI();
     ~UI();
 
-    void Set(Player* plr, Game& g);
+    void Set(Player* plr, GameplayScene& g);
     UIPlayerData getPlayerData();
     UIGameData getGameData();
     Player* player = nullptr;
-    Game* game = nullptr;
+    GameplayScene* game = nullptr;
 };

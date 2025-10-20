@@ -3,13 +3,14 @@
 #include "Config.h"
 #include <iostream>
 
+class GameplayScene;
 
 class Player : public Entity {
 public:
     Player(float x, float y);
-    void handleInput(const Uint8* k, float dt, Game& g);
-    void update(Game& g, float dt) override;
-    void render(Game& g, SDL_Renderer* renderer, float dt) override;
+    void handleInput(const Uint8* k, float dt, GameplayScene& g);
+    void update(GameplayScene& g, float dt) override;
+    void render(GameplayScene& g, SDL_Renderer* renderer, float dt) override;
 
     float currentSpeed = 0.0f;
     float baseSpeed = 0.0f;
@@ -20,7 +21,7 @@ public:
     Vec2 dir{0,0};
     float deadZoneRadius = 48.0f;
     SDL_Texture* texture = nullptr;
-    double rotation = 0.0;
+    double rotation = 10;
 private:
     
 };

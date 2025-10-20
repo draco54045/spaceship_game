@@ -7,6 +7,7 @@ class Camera {
 public:
     Camera();
     Camera(int w, int h);
+    void Set(int w, int h);
     void follow(const Vec2 &target, float dt);
     SDL_Rect worldToScreen(const SDL_Rect &r) const;
     void clamp();

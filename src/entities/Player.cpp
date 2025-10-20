@@ -4,7 +4,7 @@
 
 Player::Player(float x, float y): Entity(x,y,64,64) { team = Team::Player; }
 
-void Player::handleInput(const Uint8* k, float dt, Game& g) {
+void Player::handleInput(const Uint8* k, float dt, GameplayScene& g) {
     SDL_Rect r{int(pos.x), int(pos.y), w, h};
     auto screen = g.camera.worldToScreen(r);
     int mx = 0,my = 0; 
@@ -46,7 +46,7 @@ void Player::handleInput(const Uint8* k, float dt, Game& g) {
     }
 }
 
-void Player::update(Game& g, float dt) {
+void Player::update(GameplayScene& g, float dt) {
     currentSpeed = std::max(baseSpeed, currentSpeed - decel * dt);
     pos = pos + dir * (currentSpeed * dt);
     if(pos.x < 0) pos.x = 0;
@@ -55,7 +55,7 @@ void Player::update(Game& g, float dt) {
     if(pos.y + h > VIRTUAL_WORLD_H) pos.y = VIRTUAL_WORLD_H - h;
 }
 
-void Player::render(Game& g, SDL_Renderer* renderer, float dt) {
+void Player::render(GameplayScene& g, SDL_Renderer* renderer, float dt) {
     SDL_Rect r{int(pos.x), int(pos.y), w, h};
     auto screen = g.camera.worldToScreen(r);
     int mx = 0,my = 0; 
@@ -63,10 +63,10 @@ void Player::render(Game& g, SDL_Renderer* renderer, float dt) {
     float cx = screen.x + screen.w / 2.0f;
     float cy = screen.y + screen.h / 2.0f;
     float targetAngle = atan2(dir.y, dir.x) * (180.0f / M_PI);
-    float angleDiff = fabsf(fmodf(targetAngle - rotation + 540.0f, 360.0f) - 180.0f);
+    float angleDiff = fabsf(fmodf(targetAngle - this->rotation + 540.0f, 360.0f) - 180.0f);
     if (angleDiff > 120.0f) {
         currentSpeed *= 0.7f;
     }
-    rotation = lerpAngle(rotation, targetAngle, 10.0f * dt);
-    SDL_RenderCopyEx(renderer, texture, NULL, &screen, rotation+90, NULL, SDL_FLIP_NONE);
+    this->rotation = lerpAngle(this->rotation, targetAngle, clamp(2000000.0f * dt, 0.0f, 1.0f));
+    SDL_RenderCopyEx(renderer, texture, NULL, &screen, this->rotation+90, NULL, SDL_FLIP_NONE);
 }

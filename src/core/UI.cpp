@@ -4,7 +4,7 @@
 UI::UI(){}
 UI::~UI(){}
 
-void UI::Set(Player* plr, Game& g){
+void UI::Set(Player* plr, GameplayScene& g){
     player = plr;
     game = &g;
 }

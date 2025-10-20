@@ -23,3 +23,8 @@ void Camera::clamp() {
     if(pos.x > VIRTUAL_WORLD_W - screenW) pos.x = VIRTUAL_WORLD_W - screenW;
     if(pos.y > VIRTUAL_WORLD_H - screenH) pos.y = VIRTUAL_WORLD_H - screenH;
 }
+
+void Camera::Set(int w, int h){
+    screenW = w;
+    screenH = h;
+}

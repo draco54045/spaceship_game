@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <memory>
 #include <string>
+#include <iostream>
 #include "Board.h"
 #include "Camera.h"
 #include "TextureManager.h"
@@ -13,15 +14,20 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Config.h"
+#include "Scene.h"
 
-class Game {
+class GameplayScene : public Scene {
 public:
-    Game();
-    ~Game();
+    GameplayScene(SDL_Renderer* r);
+    ~GameplayScene();
     bool init();
     void run();
     void cleanup();
     void renderCrosshair(int sx, int sy);
+
+    void handleEvent(const SDL_Event& e) override;
+    void update(float dt) override;
+    void render(SDL_Renderer* renderer, float dt) override;
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -38,4 +44,6 @@ public:
     float fps;
 private:
     Uint64 lastTicks;
+    float fpsTimer = 0.0f;
+    int frameCount = 0;
 };

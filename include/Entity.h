@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "Vec2.h"
 
-class Game;
+class GameplayScene;
 
 enum class Team { Neutral, Player, Enemy, Bullet };
 
@@ -10,8 +10,8 @@ class Entity {
 public:
     Entity(float x, float y, int w, int h);
     virtual ~Entity() = default;
-    virtual void update(Game& g, float dt) {}
-    virtual void render(Game& g, SDL_Renderer* renderer, float dt);
+    virtual void update(GameplayScene& g, float dt) {}
+    virtual void render(GameplayScene& g, SDL_Renderer* renderer, float dt);
     SDL_Rect aabb() const;
 
     Vec2 pos;

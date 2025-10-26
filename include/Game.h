@@ -18,10 +18,10 @@
 
 class GameplayScene : public Scene {
 public:
-    GameplayScene(SDL_Renderer* r);
+    GameplayScene(SDL_Renderer* r, FontManager* f);
     ~GameplayScene();
     bool init();
-    void run();
+    //void run();
     void cleanup();
     void renderCrosshair(int sx, int sy);
 
@@ -33,7 +33,8 @@ public:
     SDL_Renderer* renderer;
     std::unique_ptr<TextureManager> texman;
     std::unique_ptr<EntityManager> entities;
-    std::unique_ptr<FontManager> fonts;
+    //std::unique_ptr<FontManager> fonts;
+    FontManager* fonts;
     std::unique_ptr<UIManager> uiMGR;
     Player* player;
     Camera camera;

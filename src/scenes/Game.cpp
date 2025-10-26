@@ -1,16 +1,18 @@
 #include "Game.h"
 
-GameplayScene::GameplayScene(SDL_Renderer* renderer): 
+GameplayScene::GameplayScene(SDL_Renderer* renderer, FontManager* f) : 
 renderer(renderer),
 texman(nullptr), 
 entities(nullptr), 
 player(nullptr), 
-fonts(nullptr), 
-camera(WINDOW_W, WINDOW_H), 
+fonts(f), 
 board(), 
 ui(), 
 uiMGR(), 
-lastTicks(SDL_GetPerformanceCounter()) {}
+lastTicks(SDL_GetPerformanceCounter()) {
+    auto& cfg = Config::get();
+    camera = Camera(cfg.windowWidth, cfg.windowHeight);
+}
 
 GameplayScene::~GameplayScene() { cleanup(); }
 
@@ -20,12 +22,12 @@ bool GameplayScene::init() {
     entities = std::make_unique<EntityManager>();
     player = entities->create<Player>(VIRTUAL_WORLD_W/2.0f - 24.0f, VIRTUAL_WORLD_H/2.0f - 24.0f);
     player->texture = texman->load("./assets/graphics/player_test.png");
-    fonts = std::make_unique<FontManager>();
-    fonts->openFonts();
-    board.Set(renderer, &camera, fonts.get());
+    //fonts = std::make_unique<FontManager>();
+    //fonts->openFonts();
+    board.Set(renderer, &camera, fonts);
     uiMGR = std::make_unique<UIManager>();
     ui.Set(player, *this);
-    uiMGR->Set(renderer, fonts.get(), &ui);
+    uiMGR->Set(renderer, fonts, &ui);
     return true;
 }
 
@@ -132,6 +134,6 @@ void GameplayScene::renderCrosshair(int sx, int sy) {
 void GameplayScene::cleanup() {
     texman.reset();
     entities.reset();
-    fonts.reset();
+    //fonts.reset();
     uiMGR.reset();
 }

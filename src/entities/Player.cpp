@@ -67,6 +67,6 @@ void Player::render(GameplayScene& g, SDL_Renderer* renderer, float dt) {
     if (angleDiff > 120.0f) {
         currentSpeed *= 0.7f;
     }
-    this->rotation = lerpAngle(this->rotation, targetAngle, clamp(2000000.0f * dt, 0.0f, 1.0f));
+    this->rotation = lerpAngle(this->rotation, targetAngle, clamp(25.0f * dt, 0.0f, 1.0f));
     SDL_RenderCopyEx(renderer, texture, NULL, &screen, this->rotation+90, NULL, SDL_FLIP_NONE);
 }

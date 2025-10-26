@@ -12,11 +12,13 @@ bool App::init() {
         std::cout << "Error initializing SDL_ttf: "<< SDL_GetError();
         return false;
     }
-    window = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, 0);
+    auto& cfg = Config::get();
+    window = SDL_CreateWindow("My Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, cfg.windowWidth, cfg.windowHeight, 0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(!renderer) { std::cerr<<"Renderer failed: "<<SDL_GetError()<<"\n"; return false; }
 
-    currentScene = std::make_unique<MainMenuScene>(renderer);
+    fonts = std::make_unique<FontManager>();
+    currentScene = std::make_unique<MainMenuScene>(renderer, fonts.get());
     return true;
 }
 

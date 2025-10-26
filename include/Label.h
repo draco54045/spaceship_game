@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-struct Button {
+struct Label {
     int pos_x;
     int pos_y;
     int w;
@@ -15,9 +15,8 @@ struct Button {
     SDL_Color text_color = {255,255,255,255};
     std::string text;
     TTF_Font* font = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 32);
-    std::function<void()> onClick;
-    Button(){}
-    Button(int b_pos_x, int b_pos_y, int b_w, int b_h, SDL_Color b_color, SDL_Color b_text_color, std::string b_text, TTF_Font* b_font /*, std::function<void()> b_onClick*/){
+    Label(){}
+    Label(int b_pos_x, int b_pos_y, int b_w, int b_h, SDL_Color b_color, SDL_Color b_text_color, std::string b_text, TTF_Font* l_font/*, std::function<void()> b_onClick*/){
         pos_x = b_pos_x;
         pos_y = b_pos_y;
         w = b_w;
@@ -25,8 +24,7 @@ struct Button {
         color = b_color;
         text_color = b_text_color;
         text = b_text;
-        font = b_font;
-        //onClick = b_onClick;
+        font = l_font;
     }
     void render(SDL_Renderer* renderer){
         int texW = 0;
@@ -45,11 +43,5 @@ struct Button {
         SDL_RenderCopy(renderer, texture, NULL, &button_text);
         SDL_DestroyTexture(texture);
         SDL_FreeSurface(surface);
-    }
-    bool wasClicked(int m_x, int m_y){
-        if (m_x > this->pos_x && m_x < (this->pos_x + this->w) && m_y > this->pos_y && m_y < (this->pos_y + this->h)){
-            return true;
-        }
-        return false;
     }
 };

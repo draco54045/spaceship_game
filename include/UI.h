@@ -10,7 +10,6 @@ struct UIPlayerData {
     std::string speed;
     std::string direction;
     std::string mouseVector;
-    std::string fps;
 };
 
 struct UIGameData {

@@ -14,5 +14,6 @@ public:
     std::vector<TTF_Font*> fonts;
     TTF_Font* GridFont = nullptr;
     TTF_Font* UIFont = nullptr;
+    TTF_Font* MMFont = nullptr;
     Game* game = nullptr;
 };

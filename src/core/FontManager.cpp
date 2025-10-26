@@ -1,6 +1,6 @@
 #include "FontManager.h"
 
-FontManager::FontManager(){}
+FontManager::FontManager(){ openFonts(); }
 FontManager::~FontManager(){ closeFonts(); }
 
 void FontManager::openFonts(){
@@ -14,6 +14,11 @@ void FontManager::openFonts(){
         std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
     }
     fonts.push_back(UIFont);
+    MMFont = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 64);
+    if (!MMFont) {
+        std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
+    }
+    fonts.push_back(MMFont);
 }
 void FontManager::closeFonts(){
     for (auto f : fonts) {

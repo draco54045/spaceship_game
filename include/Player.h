@@ -19,9 +19,11 @@ public:
     float decel = 25.0f;
     Vec2 lastDir{0,0};
     Vec2 dir{0,0};
+    Vec2 forward{1,0};
     float deadZoneRadius = 48.0f;
     SDL_Texture* texture = nullptr;
     double rotation = 10;
+    float rotVel = 0.0f;
 private:
     
 };

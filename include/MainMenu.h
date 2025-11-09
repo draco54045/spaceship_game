@@ -5,16 +5,14 @@
 #include <memory>
 #include "Button.h"
 #include "Label.h"
+#include "Config.h"
+#include <SDL_ttf.h>
+#include "SettingsMenu.h"
 
 class MainMenuScene : public Scene {
 public:
-    MainMenuScene(SDL_Renderer* r, FontManager* f) : renderer(r), startClicked(false), fonts(f) {
-        SDL_Color red = {255,0,0,255};
-        SDL_Color white = {255,255,255,255};
-        Start = Button(64, 200, 500, 100, white, red, "Start", fonts->MMFont/*, test*/);
-        Title = Label(300, 64, 0, 0, white, white, "Game name", fonts->MMFont);
-    }
-
+    MainMenuScene(SDL_Renderer* r, SDL_Window* window, FontManager* f, SFXManager* s, MusicManager* m, SettingsMenu* stm);
+    
     void handleEvent(const SDL_Event& e) override;
 
     void update(float dt) override {}
@@ -26,10 +24,16 @@ public:
     std::unique_ptr<Scene> nextScene() override; 
 
     FontManager* fonts = nullptr;
+    SFXManager* sfx = nullptr;
+    MusicManager* music = nullptr;
+    SettingsMenu* stMenu = nullptr;
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
+    std::vector<Button> buttons;
+    std::vector<Label> labels;
 
 private:
-    SDL_Renderer* renderer;
     bool startClicked;
-    Button Start;
-    Label Title;
+    //bool isFullScreened = false;
+    bool settings = false;
 };

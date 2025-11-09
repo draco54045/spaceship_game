@@ -14,11 +14,26 @@ void FontManager::openFonts(){
         std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
     }
     fonts.push_back(UIFont);
-    MMFont = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 64);
-    if (!MMFont) {
+    MMFont_medium = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 64);
+    if (!MMFont_medium) {
         std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
     }
-    fonts.push_back(MMFont);
+    fonts.push_back(MMFont_medium);
+    MMFont_small = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 24);
+    if (!MMFont_small) {
+        std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
+    }
+    fonts.push_back(MMFont_small);
+    MMFont_big = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 96);
+    if (!MMFont_big) {
+        std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
+    }
+    fonts.push_back(MMFont_big);
+    MMFont_huge = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 128);
+    if (!MMFont_huge) {
+        std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
+    }
+    fonts.push_back(MMFont_huge);
 }
 void FontManager::closeFonts(){
     for (auto f : fonts) {

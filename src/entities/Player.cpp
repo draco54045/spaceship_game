@@ -25,9 +25,11 @@ void Player::handleInput(const Uint8* k, float dt, GameplayScene& g) {
     if (insideDeadZone) {
         if (dist > enterRadius) {
             insideDeadZone = false;
-            Vec2 newDir = normalize(dir);
-            dir = lerpVec(lastDir, newDir, 10.0f * dt);
-            lastDir = normalize(dir);
+            //Vec2 newDir = normalize(dir);
+            //dir = lerpVec(lastDir, newDir, 10.0f * dt);
+            //lastDir = normalize(dir);
+            dir = normalize(dir);
+            lastDir = dir;
         } 
         else {
             dir = lastDir;
@@ -48,7 +50,10 @@ void Player::handleInput(const Uint8* k, float dt, GameplayScene& g) {
 
 void Player::update(GameplayScene& g, float dt) {
     currentSpeed = std::max(baseSpeed, currentSpeed - decel * dt);
-    pos = pos + dir * (currentSpeed * dt);
+    float rad = this->rotation * (M_PI / 180.0f);
+    forward = {cosf(rad), sinf(rad)};
+    pos = pos + forward * (currentSpeed * dt);
+    //pos = pos + dir * (currentSpeed * dt);
     if(pos.x < 0) pos.x = 0;
     if(pos.y < 0) pos.y = 0;
     if(pos.x + w > VIRTUAL_WORLD_W) pos.x = VIRTUAL_WORLD_W - w;
@@ -62,11 +67,23 @@ void Player::render(GameplayScene& g, SDL_Renderer* renderer, float dt) {
     SDL_GetMouseState(&mx,&my);
     float cx = screen.x + screen.w / 2.0f;
     float cy = screen.y + screen.h / 2.0f;
+    //float targetAngle = atan2(dir.y, dir.x) * (180.0f / M_PI);
+    //float angleDiff = fabsf(fmodf(targetAngle - this->rotation + 540.0f, 360.0f) - 180.0f);
+    //if (angleDiff > 120.0f) {
+    //    currentSpeed *= 0.7f;
+    //}
+    //this->rotation = lerpAngle(this->rotation, targetAngle, clamp(25.0f * dt, 0.0f, 1.0f));
     float targetAngle = atan2(dir.y, dir.x) * (180.0f / M_PI);
-    float angleDiff = fabsf(fmodf(targetAngle - this->rotation + 540.0f, 360.0f) - 180.0f);
-    if (angleDiff > 120.0f) {
-        currentSpeed *= 0.7f;
-    }
-    this->rotation = lerpAngle(this->rotation, targetAngle, clamp(25.0f * dt, 0.0f, 1.0f));
+    float delta = fmodf(targetAngle - this->rotation + 540.0f, 360.0f) - 180.0f;
+    const float turnAccel = 200.0f;
+    rotVel += delta * turnAccel * dt;
+    const float turnDamping = 0.8f;
+    rotVel *= turnDamping;
+    const float maxRotVel = 360.0f;
+    rotVel = clamp(rotVel, -maxRotVel, maxRotVel);
+    this->rotation += rotVel * dt;
+    //this->rotation += delta * clamp(25.0f * dt, 0.0f, 1.0f);   
+    if (this->rotation > 180.0f) this->rotation -= 360.0f;
+    if (this->rotation < -180.0f) this->rotation += 360.0f;
     SDL_RenderCopyEx(renderer, texture, NULL, &screen, this->rotation+90, NULL, SDL_FLIP_NONE);
 }

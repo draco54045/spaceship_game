@@ -16,20 +16,21 @@ void Board::renderBoard(){
 }
 
 void Board::renderGrid() {
+    auto& cfg = Config::get();
     int left = int(camera->pos.x);
     int top = int(camera->pos.y);
-    int right = left + WINDOW_W;
-    int bottom = top + WINDOW_H;
+    int right = left + cfg.windowWidth;
+    int bottom = top + cfg.windowHeight;
     int i;
     for(int gx = (left / cell) * cell; gx <= right; gx += cell) {
         SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
-        SDL_Rect line = {gx, top, 1, WINDOW_H};
+        SDL_Rect line = {gx, top, 1, cfg.windowHeight};
         auto s = camera->worldToScreen(line);
         SDL_RenderFillRect(renderer, &s);
     }
     for(int gy = (top / cell) * cell; gy <= bottom; gy += cell) {
         SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
-        SDL_Rect line = {left, gy, WINDOW_W, 1};
+        SDL_Rect line = {left, gy, cfg.windowWidth, 1};
         auto s = camera->worldToScreen(line);
         SDL_RenderFillRect(renderer, &s);
     }

@@ -19,10 +19,11 @@ void UIManager::drawUI(){
 }
 
 void UIManager::drawElement(int x, int y, std::string content, SDL_Color color, TTF_Font *font){
+    auto& cfg = Config::get();
     int top = 0;
     int left = 0;
-    int right = WINDOW_W;
-    int bottom = WINDOW_H;
+    int right = cfg.windowWidth;
+    int bottom = cfg.windowHeight;
     int texW = 0;
     int texH = 0;
 

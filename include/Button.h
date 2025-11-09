@@ -4,12 +4,17 @@
 #include <iostream>
 #include <functional>
 #include <string>
+#include "Config.h"
 
 struct Button {
     int pos_x;
     int pos_y;
     int w;
     int h;
+    int base_pos_x;
+    int base_pos_y;
+    int base_w;
+    int base_h;
     SDL_Rect rect;
     SDL_Color color = {0,0,0,255};
     SDL_Color text_color = {255,255,255,255};
@@ -19,9 +24,13 @@ struct Button {
     Button(){}
     Button(int b_pos_x, int b_pos_y, int b_w, int b_h, SDL_Color b_color, SDL_Color b_text_color, std::string b_text, TTF_Font* b_font /*, std::function<void()> b_onClick*/){
         pos_x = b_pos_x;
+        base_pos_x = pos_x;
         pos_y = b_pos_y;
+        base_pos_y = pos_y;
         w = b_w;
+        base_w = w;
         h = b_h;
+        base_h = h;
         color = b_color;
         text_color = b_text_color;
         text = b_text;
@@ -51,5 +60,18 @@ struct Button {
             return true;
         }
         return false;
+    }
+    void updateLayout(){
+        auto& cfg = Config::get();
+        pos_x = base_pos_x * cfg.scaleX;
+        pos_y = base_pos_y * cfg.scaleY;
+        w = base_w * cfg.scaleX;
+        h = base_h * cfg.scaleY;
+    }
+    void updateText(std::string new_text){
+        text = new_text;
+    }
+    void updateFont(TTF_Font* new_font){
+        font = new_font;
     }
 };

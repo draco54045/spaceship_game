@@ -15,10 +15,18 @@
 #include "Bullet.h"
 #include "Config.h"
 #include "Scene.h"
+#include "GameState.h"
+#include "Label.h"
+#include "Button.h"
+#include "PauseMenu.h"
+#include <SDL_mixer.h>
+#include "SFXManager.h"
+#include "MusicManager.h"
+#include "SettingsMenu.h"
 
 class GameplayScene : public Scene {
 public:
-    GameplayScene(SDL_Renderer* r, FontManager* f);
+    GameplayScene(SDL_Renderer* r, SDL_Window* w, FontManager* f, SFXManager* s, MusicManager* m, SettingsMenu* stm);
     ~GameplayScene();
     bool init();
     //void run();
@@ -35,12 +43,16 @@ public:
     std::unique_ptr<EntityManager> entities;
     //std::unique_ptr<FontManager> fonts;
     FontManager* fonts;
+    SFXManager* sfx;
+    MusicManager* music;
     std::unique_ptr<UIManager> uiMGR;
     Player* player;
     Camera camera;
     TTF_Font* font = nullptr;
     Board board;
     UI ui;
+    PauseMenu psMenu;
+    SettingsMenu* stMenu;
 
     float fps;
 private:

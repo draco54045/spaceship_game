@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "Camera.h"
 #include "FontManager.h"
+#include "Config.h"
 
 class Board{
 public:

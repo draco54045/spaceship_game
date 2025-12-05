@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Vec2.h"
 
-Player::Player(float x, float y): Entity(x,y,64,64) { team = Team::Player; }
+Player::Player(float x, float y, float hlth): Entity(x,y,64,64) { team = Team::Player; this->health = hlth; rotation = 10; }
 
 void Player::handleInput(const Uint8* k, float dt, GameplayScene& g) {
     SDL_Rect r{int(pos.x), int(pos.y), w, h};
@@ -19,7 +19,7 @@ void Player::handleInput(const Uint8* k, float dt, GameplayScene& g) {
     static bool insideDeadZone = false;
     Vec2 vel{0,0};
     if(k[SDL_SCANCODE_W] || k[SDL_SCANCODE_UP]) {vel.y = dir.y; vel.x = dir.x; currentSpeed = std::min(maxSpeed, currentSpeed + accel * dt);}
-    //if(k[SDL_SCANCODE_S] || k[SDL_SCANCODE_DOWN]) {}
+    if(k[SDL_SCANCODE_S] || k[SDL_SCANCODE_DOWN]) { currentSpeed = std::min(maxSpeed, currentSpeed - decel * dt); }
     //if(k[SDL_SCANCODE_A] || k[SDL_SCANCODE_LEFT]) vel.x -= 1;
     //if(k[SDL_SCANCODE_D] || k[SDL_SCANCODE_RIGHT]) vel.x += 1;
     if (insideDeadZone) {
@@ -49,11 +49,14 @@ void Player::handleInput(const Uint8* k, float dt, GameplayScene& g) {
 }
 
 void Player::update(GameplayScene& g, float dt) {
-    currentSpeed = std::max(baseSpeed, currentSpeed - decel * dt);
+    float friction = 25.0f;
+    currentSpeed = std::max(baseSpeed, currentSpeed - friction * dt);
+    //this->hitbox = {int(this->pos.x), int(this->pos.y), w, h};
     float rad = this->rotation * (M_PI / 180.0f);
     forward = {cosf(rad), sinf(rad)};
     pos = pos + forward * (currentSpeed * dt);
     //pos = pos + dir * (currentSpeed * dt);
+    this->hitbox = aabb();
     if(pos.x < 0) pos.x = 0;
     if(pos.y < 0) pos.y = 0;
     if(pos.x + w > VIRTUAL_WORLD_W) pos.x = VIRTUAL_WORLD_W - w;
@@ -86,4 +89,10 @@ void Player::render(GameplayScene& g, SDL_Renderer* renderer, float dt) {
     if (this->rotation > 180.0f) this->rotation -= 360.0f;
     if (this->rotation < -180.0f) this->rotation += 360.0f;
     SDL_RenderCopyEx(renderer, texture, NULL, &screen, this->rotation+90, NULL, SDL_FLIP_NONE);
+
+    //draw hitbox
+    auto hb = g.camera.worldToScreen(this->hitbox);
+    SDL_SetRenderDrawColor(renderer, 255,0,0,255);
+    SDL_RenderDrawRect(renderer, &hb);
+    //SDL_RenderFillRect(renderer, &hb);
 }

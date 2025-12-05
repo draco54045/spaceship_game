@@ -17,7 +17,8 @@ public:
     }
     void updateAll(GameplayScene& g, float dt);
     void renderAll(GameplayScene& g, SDL_Renderer* renderer, float dt);
+    void checkCollisions(GameplayScene& g);
+    std::vector<std::unique_ptr<Entity>> entities;
 
 private:
-    std::vector<std::unique_ptr<Entity>> entities;
 };

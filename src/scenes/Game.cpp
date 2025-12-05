@@ -14,6 +14,7 @@ ui(),
 uiMGR(),
 psMenu(f),
 stMenu(stm),
+enmSpawner(),
 lastTicks(SDL_GetPerformanceCounter()) {
     auto& cfg = Config::get();
     camera = Camera(cfg.windowWidth, cfg.windowHeight);
@@ -27,8 +28,11 @@ bool GameplayScene::init() {
     if(!renderer) { std::cerr<<"Renderer failed: "<<SDL_GetError()<<"\n"; return false; }
     texman = std::make_unique<TextureManager>(renderer);
     entities = std::make_unique<EntityManager>();
-    player = entities->create<Player>(VIRTUAL_WORLD_W/2.0f - 24.0f, VIRTUAL_WORLD_H/2.0f - 24.0f);
+    player = entities->create<Player>(VIRTUAL_WORLD_W/2.0f - 24.0f, VIRTUAL_WORLD_H/2.0f - 24.0f, 100.0f);
     player->texture = texman->load("./assets/graphics/player_test.png");
+    enmSpawner.Set(*this, player, *texman);
+    //Enemy *e = entities->create<Enemy>(VIRTUAL_WORLD_W/2.0f + 300, VIRTUAL_WORLD_H/2.0f + 200);
+    //Enemy *e2 = entities->create<Enemy>(VIRTUAL_WORLD_W/2.0f - 300, VIRTUAL_WORLD_H/2.0f - 200);
     //fonts = std::make_unique<FontManager>();
     //fonts->openFonts();
     board.Set(renderer, &camera, fonts);
@@ -38,6 +42,9 @@ bool GameplayScene::init() {
     psMenu.Set(renderer, fonts);
     stMenu->Set(renderer, fonts);
     Mix_PlayMusic(music->test_track, -1);
+
+    score = 0;
+    //std::cout << typeid(*entities->entities[0]).name() << " : " << typeid(*entities->entities[1]).name() << std::endl;
     return true;
 }
 
@@ -88,26 +95,28 @@ void GameplayScene::handleEvent(const SDL_Event& e) {
         //Vec2 dir = mouseWorld - Vec2(player->pos.x + player->w / 2.0f, player->pos.y + player->h / 2.0f);
         Vec2 dir = {player->forward.x, player->forward.y};
         Vec2 spawn = Vec2(player->pos.x + player->w / 2.0f - 4, player->pos.y + player->h / 2.0f - 4);
-        entities->create<Bullet>(spawn.x, spawn.y, dir);
+        entities->create<Bullet>(spawn.x, spawn.y, dir, Team::PlayerBullet);
     }
 }
 
 void GameplayScene::update(float dt) {
     auto& gState = GameState::get();
+    if (gState.paused == true){
+        return;
+    }
     camera.follow(Vec2(player->pos.x + player->w / 2.0f, player->pos.y + player->h / 2.0f), dt);
     const Uint8* keystate = SDL_GetKeyboardState(NULL);
     player->handleInput(keystate, dt, *this);
-    player->update(*this, dt);
     entities->updateAll(*this, dt);
+    entities->checkCollisions(*this);
+    handleEnvironment(player, dt);
+    enmSpawner.update(dt);
     frameCount++;
     fpsTimer += dt;
     if (fpsTimer >= 1.0f) {
         fps = frameCount / fpsTimer;
         frameCount = 0;
         fpsTimer = 0.0f;
-    }
-    if (gState.paused == true){
-
     }
 }
 
@@ -137,7 +146,26 @@ void GameplayScene::render(SDL_Renderer* renderer, float dt) {
     }
 }
 
+void GameplayScene::handleEnvironment(Entity* ent, float dt){   
+    bool danger = board.entityInYellowZone(*ent);
+    bool megaDanger = board.entityInRedZone(*ent);
+    if (danger || megaDanger){
+        dangerTimer += dt;
+        if(dangerTimer >= dangerInterval){
+            if(danger && !megaDanger){
+                ent->health -= 10;
+            }
+            else if(megaDanger){
+                ent->health -= 30;
+            }
+            dangerTimer -= dangerInterval;
+        }
+    }
+    else {
+        dangerTimer = 0.0f;
+    }
 
+}
 
 /*void GameplayScene::run() {
     bool quit = false;

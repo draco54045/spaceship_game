@@ -10,12 +10,15 @@ void UIManager::Set(SDL_Renderer* rend, FontManager* fo, UI* u){
 }
 
 void UIManager::drawUI(){
+    auto& cfg = Config::get();
     auto playerData = ui->getPlayerData();
-    drawElement(4, 4, "speed : " + playerData.speed, UIColor, fonts->UIFont);
-    drawElement(4, 40, "direction : " + playerData.direction, UIColor, fonts->UIFont);
-    drawElement(4, 80, "mouse : " + playerData.mouseVector, UIColor, fonts->UIFont);
+    drawElement(cfg.windowWidth/20, cfg.windowHeight/20, "speed : " + playerData.speed, UIColor, fonts->UIFont);
+    drawElement(cfg.windowWidth/20, cfg.windowHeight/20 + 50, "direction : " + playerData.direction, UIColor, fonts->UIFont);
+    drawElement(cfg.windowWidth/20, cfg.windowHeight/20 + 100, "mouse : " + playerData.mouseVector, UIColor, fonts->UIFont);
+    drawElement(cfg.windowWidth/20, cfg.windowHeight/20 + 150, "health : " + playerData.health, UIColor, fonts->UIFont);
     auto gameData = ui->getGameData();
-    drawElement(4,116, "FPS : " + gameData.fps, UIColor, fonts->UIFont);
+    drawElement(cfg.windowWidth/20, cfg.windowHeight/20 + 200, "FPS : " + gameData.fps, UIColor, fonts->UIFont);
+    drawElement(cfg.windowWidth/20, cfg.windowHeight/20 + 250, "Score : " + gameData.score, UIColor, fonts->UIFont);
 }
 
 void UIManager::drawElement(int x, int y, std::string content, SDL_Color color, TTF_Font *font){

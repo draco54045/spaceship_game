@@ -15,12 +15,14 @@ UIPlayerData UI::getPlayerData(){
     return { 
         std::to_string(player->currentSpeed),
         "[" + std::to_string(player->dir.x) + ", " + std::to_string(player->dir.y) + "]",
-        "[" + std::to_string(mx) + ", " + std::to_string(my) + "]"
+        "[" + std::to_string(mx) + ", " + std::to_string(my) + "]",
+        std::to_string(player->health)
     };
 }
 
 UIGameData UI::getGameData(){
     return { 
-        std::to_string((int)game->fps)
+        std::to_string((int)game->fps),
+        std::to_string((game->score))
     };
 }

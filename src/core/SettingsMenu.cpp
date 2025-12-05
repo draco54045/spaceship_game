@@ -96,7 +96,6 @@ void SettingsMenu::handleEventClick(const SDL_Event& e, SDL_Window* window, SFXM
         }
     };
 
-// --- NEW: helper that sets resolution safely in windowed or fullscreen ---
     auto applyNewWindowSize = [&](int w, int h) {
         cfg.windowWidth  = w;
         cfg.windowHeight = h;
@@ -118,16 +117,12 @@ void SettingsMenu::handleEventClick(const SDL_Event& e, SDL_Window* window, SFXM
         }
         updateAllLayouts();
     };
-
-    // --- Back button ---
     if (buttons.back().wasClicked(x, y)) {
         Mix_PlayChannel(-1, sfx->button_press, 0);
         cfg.writeToFile("./settings.ini");
         gState.settings = false;
         return;
     }
-
-    // --- Fullscreen desktop (auto fullscreen) ---
     if (buttons[0].wasClicked(x, y)) {
         Mix_PlayChannel(-1, sfx->button_press, 0);
         SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -136,8 +131,6 @@ void SettingsMenu::handleEventClick(const SDL_Event& e, SDL_Window* window, SFXM
         applyNewWindowSize(dm.w, dm.h);
         cfg.isFullScreened = true;
     }
-
-    // --- Fullscreen windowed ---
     else if (buttons[1].wasClicked(x, y)) {
         Mix_PlayChannel(-1, sfx->button_press, 0);
         SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
@@ -146,15 +139,12 @@ void SettingsMenu::handleEventClick(const SDL_Event& e, SDL_Window* window, SFXM
         applyNewWindowSize(dm.w, dm.h);
         cfg.isFullScreened = true;
     }
-
-    // --- Windowed mode ---
     else if (buttons[2].wasClicked(x, y)) {
         Mix_PlayChannel(-1, sfx->button_press, 0);
         SDL_SetWindowFullscreen(window, 0);
         applyNewWindowSize(cfg.windowWidth, cfg.windowHeight);
         cfg.isFullScreened = false;
     }
-
     if (buttons[3].wasClicked(x, y)) { // 1280x720
         Mix_PlayChannel(-1, sfx->button_press, 0);
         SDL_Delay(100);
@@ -170,8 +160,6 @@ void SettingsMenu::handleEventClick(const SDL_Event& e, SDL_Window* window, SFXM
         SDL_Delay(100);
         applyNewWindowSize(2560, 1440);
     }
-
-    // --- Update display mode label ---
     int windowFlags = SDL_GetWindowFlags(window);
     std::string windowMode;
 

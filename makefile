@@ -3,7 +3,7 @@ CXX_LINUX = g++
 CXX_WIN = /usr/bin/x86_64-w64-mingw32-g++
 SDL_WIN_INC = -I$(HOME)/Documents/Libraries/SDL2-2.32.10/x86_64-w64-mingw32/include/SDL2 -I$(HOME)/Documents/Libraries/SDL2_image-2.8.8/x86_64-w64-mingw32/include/SDL2 -I$(HOME)/Documents/Libraries/SDL2_ttf-2.24.0/x86_64-w64-mingw32/include/SDL2 -I$(HOME)/Documents/Libraries/SDL2_mixer-2.8.1/x86_64-w64-mingw32/include/SDL2
 SDL_WIN_LIB = -L$(HOME)/Documents/Libraries/SDL2-2.32.10/x86_64-w64-mingw32/lib -L$(HOME)/Documents/Libraries/SDL2_image-2.8.8/x86_64-w64-mingw32/lib -L$(HOME)/Documents/Libraries/SDL2_ttf-2.24.0/x86_64-w64-mingw32/lib -L$(HOME)/Documents/Libraries/SDL2_mixer-2.8.1/x86_64-w64-mingw32/lib
-CXXFLAGS = -Wall -Wextra -std=c++17 -Wno-unused-parameter -Wno-unused-variable
+CXXFLAGS = -Wall -Wextra -std=c++17 -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function
 SDL_FLAGS = $(shell pkg-config --cflags --libs sdl2) -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 
 # Directories

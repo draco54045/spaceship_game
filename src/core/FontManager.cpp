@@ -4,7 +4,7 @@ FontManager::FontManager(){ openFonts(); }
 FontManager::~FontManager(){ closeFonts(); }
 
 void FontManager::openFonts(){
-    GridFont = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 16);
+    GridFont = TTF_OpenFont("./assets/fonts/Roboto/static/Roboto-Regular.ttf", 32);
     if (!GridFont) {
         std::cerr << "Failed to load font: " << TTF_GetError() << "\n";
     }

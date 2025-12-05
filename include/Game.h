@@ -23,6 +23,9 @@
 #include "SFXManager.h"
 #include "MusicManager.h"
 #include "SettingsMenu.h"
+#include "Enemy.h"
+#include <typeinfo>
+#include "EnemySpawner.h"
 
 class GameplayScene : public Scene {
 public:
@@ -36,6 +39,8 @@ public:
     void handleEvent(const SDL_Event& e) override;
     void update(float dt) override;
     void render(SDL_Renderer* renderer, float dt) override;
+
+    void handleEnvironment(Entity* ent, float dt);
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -53,10 +58,16 @@ public:
     UI ui;
     PauseMenu psMenu;
     SettingsMenu* stMenu;
+    EnemySpawner enmSpawner;
+    int score;
 
     float fps;
 private:
     Uint64 lastTicks;
     float fpsTimer = 0.0f;
     int frameCount = 0;
+
+    float dangerTimer;
+    float dangerInterval = 1.0f;
+
 };

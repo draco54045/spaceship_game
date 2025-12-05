@@ -10,10 +10,12 @@ struct UIPlayerData {
     std::string speed;
     std::string direction;
     std::string mouseVector;
+    std::string health;
 };
 
 struct UIGameData {
     std::string fps;
+    std::string score;
 };
 
 class UI {

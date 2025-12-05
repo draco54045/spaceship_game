@@ -3,9 +3,11 @@
 
 //static const int WINDOW_W = 1280;
 //static const int WINDOW_H = 800;
-static const int VIRTUAL_WORLD_W = 16384;
-static const int VIRTUAL_WORLD_H = 16384;
-static const void forceFullRedraw(SDL_Renderer* renderer, int w, int h) { //helper for the settings menu
+//static const int VIRTUAL_WORLD_W = 65536;
+//static const int VIRTUAL_WORLD_H = 65536;
+static const int VIRTUAL_WORLD_W = 8192;
+static const int VIRTUAL_WORLD_H = 8192;
+static void forceFullRedraw(SDL_Renderer* renderer, int w, int h) { //helper for the settings menu
     //std::cout << "test here" << std::endl;
     SDL_RenderSetViewport(renderer, nullptr);
     SDL_RenderSetLogicalSize(renderer, w, h);
